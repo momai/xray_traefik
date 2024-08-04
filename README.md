@@ -23,7 +23,7 @@ This repository sets up V2Ray with Traefik as a reverse proxy, allowing multiple
 ```
 2. **Update Configuration:**
 - Edit `docker-compose.yml`: Update domain names in the Traefik labels.
-`traefik.http.routers.v2ray-ws1.rule=Host(`vpn.momai.dev`) && PathPrefix(`/ws`)`
+`traefik.http.routers.v2ray-ws1.rule=Host(vpn.momai.dev) && PathPrefix(/ws)`
 - Edit v2ray.json: Add additional servers in the inbounds array.
 ```
 {
