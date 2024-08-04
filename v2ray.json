@@ -1,0 +1,84 @@
+{
+  "inbounds": [
+    {
+      "listen": "0.0.0.0",
+      "port": 8080,
+      "protocol": "shadowsocks",
+      "settings": {
+        "password": "password",
+        "method": "chacha20-ietf-poly1305",
+        "network": "tcp,udp"
+      },
+      "server_name": "example.com",
+      "label": "Vpn | v2ray-public | momai"
+    },
+# websocket
+    {
+      "listen": "0.0.0.0",
+      "port": 8388,
+      "protocol": "shadowsocks",
+      "settings": {
+        "password": "password",
+        "method": "aes-256-gcm"
+      },
+      "streamSettings": {
+        "network": "ws",
+        "wsSettings": {
+          "path": "/ws"
+        }
+      },
+      "server_name": "example.com",
+      "label": "Vpn | v2ray-websocket | momai"
+    },
+    {
+      "listen": "0.0.0.0",
+      "port": 8389,
+      "protocol": "shadowsocks",
+      "settings": {
+        "password": "password",
+        "method": "aes-256-gcm"
+      },
+      "streamSettings": {
+        "network": "ws",
+        "wsSettings": {
+          "path": "/2_ws"
+        }
+      },
+      "server_name": "example.com",
+      "label": "Vpn | v2ray-websocket_2 | momai"
+    },
+    {
+      "listen": "0.0.0.0",
+      "port": 8390,
+      "protocol": "shadowsocks",
+      "settings": {
+        "password": "password",
+        "method": "aes-256-gcm"
+      },
+      "streamSettings": {
+        "network": "ws",
+        "wsSettings": {
+          "path": "/3_ws"
+        }
+      },
+      "server_name": "example.com",
+      "label": "Vpn | v2ray-websocket_3 | momai"
+    }
+  ],
+  "outbounds": [
+    {
+      "protocol": "freedom",
+      "tag": "freedom"
+    }
+  ],
+  "dns": {
+    "servers": [
+      "8.8.8.8",
+      "8.8.4.4",
+      "localhost"
+    ]
+  },
+  "log": {
+    "loglevel": "debug"
+  }
+}
