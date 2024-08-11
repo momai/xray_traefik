@@ -9,17 +9,106 @@
         "method": "chacha20-ietf-poly1305",
         "network": "tcp,udp"
       },
-      "server_name": "example.com",
-      "label": "Vpn | v2ray-public | momai"
+      "server_name": "public.example.com",
+      "label": "Vpn | v2ray-public",
+      "sniffing": {
+        "enabled": true,
+        "destOverride": ["http", "tls"]
+      }
     },
-# websocket
     {
       "listen": "0.0.0.0",
-      "port": 8388,
+      "port": 8000,
       "protocol": "shadowsocks",
       "settings": {
         "password": "password",
-        "method": "aes-256-gcm"
+        "method": "chacha20-ietf-poly1305",
+        "network": "tcp,udp"
+      },
+      "server_name": "example.com",
+      "label": "Vpn | v2ray",
+      "sniffing": {
+        "enabled": true,
+        "destOverride": ["http", "tls"]
+      }
+    },
+    {
+      "listen": "0.0.0.0",
+      "port": 993,
+      "protocol": "shadowsocks",
+      "settings": {
+        "password": "password",
+        "method": "chacha20-ietf-poly1305",
+        "network": "tcp,udp"
+      },
+      "server_name": "example.com",
+      "label": "Vpn | v2ray-993",
+      "sniffing": {
+        "enabled": true,
+        "destOverride": ["http", "tls"]
+      }
+    },
+    {
+      "listen": "0.0.0.0",
+      "port": 40024,
+      "protocol": "shadowsocks",
+      "settings": {
+        "password": "password",
+        "method": "chacha20-ietf-poly1305",
+        "network": "tcp,udp"
+      },
+      "server_name": "example.com",
+      "label": "Vpn | v2ray-40024",
+      "sniffing": {
+        "enabled": true,
+        "destOverride": ["http", "tls"]
+      }
+    },
+    {
+      "listen": "0.0.0.0",
+      "port": 8443,
+      "protocol": "shadowsocks",
+      "settings": {
+        "password": "password",
+        "method": "chacha20-ietf-poly1305",
+        "network": "tcp,udp"
+      },
+      "server_name": "example.com",
+      "label": "Vpn | v2ray-friends",
+      "sniffing": {
+        "enabled": true,
+        "destOverride": ["http", "tls"]
+      }
+    },
+    {
+      "listen": "0.0.0.0",
+      "port": 8081,
+      "protocol": "shadowsocks",
+      "settings": {
+        "password": "password",
+        "method": "chacha20-ietf-poly1305",
+        "network": "tcp,udp"
+      },
+      "server_name": "example.com",
+      "label": "Vpn | v2ray-family",
+      "sniffing": {
+        "enabled": true,
+        "destOverride": ["http", "tls"]
+      }
+    },
+    {
+      "listen": "0.0.0.0",
+      "port": 8388,
+      "protocol": "vless",
+      "settings": {
+        "clients": [
+          {
+            "id": "27455f19-a007-49c1-919c-ed58bc02b209",
+            "level": 0,
+            "email": "3@example.com"
+          }
+        ],
+        "decryption": "none"
       },
       "streamSettings": {
         "network": "ws",
@@ -28,15 +117,52 @@
         }
       },
       "server_name": "example.com",
-      "label": "Vpn | v2ray-websocket | momai"
+      "label": "Vpn | v2ray-vless-websocket",
+      "sniffing": {
+        "enabled": true,
+        "destOverride": ["http", "tls"]
+      }
     },
     {
       "listen": "0.0.0.0",
       "port": 8389,
-      "protocol": "shadowsocks",
+      "protocol": "vless",
       "settings": {
-        "password": "password",
-        "method": "aes-256-gcm"
+        "clients": [
+          {
+            "id": "e2847d8f-5733-43e6-9c65-83b686475512",
+            "level": 0,
+            "email": "public@example.com"
+          }
+        ],
+        "decryption": "none"
+      },
+      "streamSettings": {
+        "network": "ws",
+        "wsSettings": {
+          "path": "/1_ws"
+        }
+      },
+      "server_name": "public.example.com",
+      "label": "Vpn | v2ray-vless-websocket_public",
+      "sniffing": {
+        "enabled": true,
+        "destOverride": ["http", "tls"]
+      }
+    },
+    {
+      "listen": "0.0.0.0",
+      "port": 8390,
+      "protocol": "vless",
+      "settings": {
+        "clients": [
+          {
+            "id": "27455f19-a007-49c1-919c-ed58bc02b209",
+            "level": 0,
+            "email": "2@example.com"
+          }
+        ],
+        "decryption": "none"
       },
       "streamSettings": {
         "network": "ws",
@@ -44,41 +170,102 @@
           "path": "/2_ws"
         }
       },
-      "server_name": "example.com",
-      "label": "Vpn | v2ray-websocket_2 | momai"
+      "server_name": "vpn.example.com",
+      "label": "Vpn | v2ray-vless-websocket2",
+      "sniffing": {
+        "enabled": true,
+        "destOverride": ["http", "tls"]
+      }
     },
     {
-      "listen": "0.0.0.0",
-      "port": 8390,
-      "protocol": "shadowsocks",
+      "tag": "dns-in",
+      "port": 53,
+      "protocol": "dokodemo-door",
       "settings": {
-        "password": "password",
-        "method": "aes-256-gcm"
-      },
-      "streamSettings": {
-        "network": "ws",
-        "wsSettings": {
-          "path": "/3_ws"
-        }
-      },
-      "server_name": "example.com",
-      "label": "Vpn | v2ray-websocket_3 | momai"
+        "address": "1.1.1.1",
+        "port": 53,
+        "network": "tcp,udp"
+      }
     }
   ],
   "outbounds": [
     {
       "protocol": "freedom",
-      "tag": "freedom"
+      "tag": "direct",
+      "settings": {
+        "domainStrategy": "UseIP"
+      }
+    },
+    {
+      "protocol": "blackhole",
+      "tag": "blocked"
+    },
+    {
+      "protocol": "dns",
+      "tag": "dns-out"
     }
   ],
   "dns": {
+    "hosts": {
+      "domain:googleapis.cn": "googleapis.com"
+    },
     "servers": [
+      "1.1.1.1",
       "8.8.8.8",
-      "8.8.4.4",
-      "localhost"
+      "9.9.9.9",
+      "208.67.222.222"
+    ],
+    "queryStrategy": "UseIPv4",
+    "disableCache": false,
+    "disableFallback": false
+  },
+  "routing": {
+    "domainStrategy": "IPOnDemand",
+    "rules": [
+      {
+        "type": "field",
+        "inboundTag": ["dns-in"],
+        "outboundTag": "dns-out"
+      },
+      {
+        "type": "field",
+        "ip": ["geoip:private"],
+        "outboundTag": "direct"
+      },
+      {
+        "type": "field",
+        "domain": [
+          "geosite:category-ads-all"
+        ],
+        "outboundTag": "blocked"
+      },
+      {
+        "type": "field",
+        "network": "udp,tcp",
+        "outboundTag": "direct"
+      }
     ]
   },
+  "policy": {
+    "levels": {
+      "0": {
+        "handshake": 4,
+        "connIdle": 300,
+        "uplinkOnly": 2,
+        "downlinkOnly": 5,
+        "statsUserUplink": true,
+        "statsUserDownlink": true,
+        "bufferSize": 4096
+      }
+    },
+    "system": {
+      "statsInboundUplink": true,
+      "statsInboundDownlink": true,
+      "statsOutboundUplink": true,
+      "statsOutboundDownlink": true
+    }
+  },
   "log": {
-    "loglevel": "debug"
+    "loglevel": "warning"
   }
 }
