@@ -64,3 +64,30 @@ for inbound in config.get('inbounds', []):
             print(f"{ss_url}\n")
         else:
             print("Error: Method or password missing for Shadowsocks.")
+
+# Print header for VLESS
+print("\033[1m\033[34mVLESS:\033[0m")
+
+# Generate VLESS URL for each inbound
+for inbound in config.get('inbounds', []):
+    if inbound.get('protocol') == 'vless':
+        # Use port 443 for VLESS connections
+        port = '443'
+        clients = inbound.get('settings', {}).get('clients', [])
+        server_name = inbound.get('server_name', ip)
+        label = inbound.get('label', 'Unnamed-Server')
+
+        for client in clients:
+            uuid = client.get('id')
+            email = client.get('email', 'Unnamed-Client')
+            encoded_label = quote(f"{label} ({email})")
+
+            stream_settings = inbound.get('streamSettings', {})
+            network = stream_settings.get('network', 'tcp')
+            ws_path = stream_settings.get('wsSettings', {}).get('path', '')
+
+            vless_url = f"vless://{uuid}@{server_name}:{port}?encryption=none&type={network}&path={quote(ws_path)}&security=tls#{encoded_label}"
+
+            # Print VLESS URL
+            print(f"{label} ({email})")
+            print(f"{vless_url}\n")
