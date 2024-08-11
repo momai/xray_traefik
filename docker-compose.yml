@@ -1,8 +1,8 @@
 services:
   traefik:
-    image: traefik:v2.4
+    image: traefik:latest
     command:
-      - "--log.level=DEBUG"
+      - "--log.level=INFO"
       - "--api.insecure=false"
       - "--providers.docker=true"
       - "--entrypoints.web.address=:80"
@@ -11,62 +11,57 @@ services:
       - "--certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web"
       - "--certificatesresolvers.myresolver.acme.email=admin@example.com"
       - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
-    ports:
-      - "80:80"
-      - "443:443"
-      - "8082:8082"
-      - "50057:50057"
+    network_mode: "host"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "./letsencrypt:/letsencrypt"
-    networks:
-      - v2ray_network
   v2ray:
     image: ghcr.io/v2fly/v2ray:v5.16.1
     restart: always
-#    network_mode: "host"
     environment:
       - v2ray.vmess.aead.forced=false
     volumes:
       - ./v2ray.json:/etc/v2ray/config.json
-    ports:
-      - "8000:8000"
-      - "8080:8080"
-      - "8443:8443"
-      - "993:993"
-      - "40024:40024"
-      - "8081:8081"
-#      - "8388"
+      - ./geosite.dat:/usr/local/share/v2ray/geosite.dat
+      - ./geoip.dat:/usr/local/share/v2ray/geoip.dat
+    network_mode: "host"
     labels:
       - "traefik.enable=true"
-      # 1 WebSocket connection
-      - "traefik.http.routers.v2ray-ws1.rule=Host(`example.com`) && PathPrefix(`/ws`)"  # fix domain
+      - "traefik.http.routers.v2ray.rule=Host(`${DOMAIN}`)"
+      - "traefik.http.routers.v2ray.entrypoints=websecure"
+      - "traefik.http.routers.v2ray.tls.certresolver=myresolver"
+      - "traefik.http.services.v2ray.loadbalancer.server.port=8388"
+      # 0 WebSocket connection
+      - "traefik.http.routers.v2ray-ws1.rule=Host(`${DOMAIN}`) && PathPrefix(`/ws`)"
       - "traefik.http.routers.v2ray-ws1.entrypoints=websecure"
       - "traefik.http.routers.v2ray-ws1.tls.certresolver=myresolver"
       - "traefik.http.routers.v2ray-ws1.middlewares=v2ray-headers"
       - "traefik.http.routers.v2ray-ws1.service=v2ray-ws1"
       - "traefik.http.services.v2ray-ws1.loadbalancer.server.port=8388"
 
-      # 2 WebSocket connection
-      - "traefik.http.routers.v2ray-ws2.rule=Host(`example.com`) && PathPrefix(`/2_ws`)" # fix domain
+      # 1 WebSocket connection
+      - "traefik.http.routers.v2ray-ws2.rule=Host(`${PUBLIC_DOMAIN}`) && PathPrefix(`/1_ws`)"
       - "traefik.http.routers.v2ray-ws2.entrypoints=websecure"
       - "traefik.http.routers.v2ray-ws2.tls.certresolver=myresolver"
       - "traefik.http.routers.v2ray-ws2.middlewares=v2ray-headers"
       - "traefik.http.routers.v2ray-ws2.service=v2ray-ws2"
       - "traefik.http.services.v2ray-ws2.loadbalancer.server.port=8389"
 
-      # 3 WebSocket connection
-      - "traefik.http.routers.v2ray-ws3.rule=Host(`example.com`) && PathPrefix(`/3_ws`)" # fix domain
+      # 2 WebSocket connection
+      - "traefik.http.routers.v2ray-ws3.rule=Host(`${DOMAIN}`) && PathPrefix(`/2_ws`)"
       - "traefik.http.routers.v2ray-ws3.entrypoints=websecure"
       - "traefik.http.routers.v2ray-ws3.tls.certresolver=myresolver"
       - "traefik.http.routers.v2ray-ws3.middlewares=v2ray-headers"
       - "traefik.http.routers.v2ray-ws3.service=v2ray-ws3"
       - "traefik.http.services.v2ray-ws3.loadbalancer.server.port=8390"
 
+      # VLESS WebSocket connection
+      - "traefik.http.routers.v2ray-vless.rule=Host(`${DOMAIN}`) && PathPrefix(`/3_ws`)"
+      - "traefik.http.routers.v2ray-vless.entrypoints=websecure"
+      - "traefik.http.routers.v2ray-vless.tls.certresolver=myresolver"
+      - "traefik.http.routers.v2ray-vless.middlewares=v2ray-headers"
+      - "traefik.http.routers.v2ray-vless.service=v2ray-vless"
+      - "traefik.http.services.v2ray-vless.loadbalancer.server.port=8444"
+
       # Middleware applied to both routers
       - "traefik.http.middlewares.v2ray-headers.headers.customrequestheaders.X-Forwarded-Proto=https"
-    networks:
-      - v2ray_network
-networks:
-  v2ray_network:
-    driver: bridge
