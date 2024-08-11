@@ -103,7 +103,7 @@
       "settings": {
         "clients": [
           {
-            "id": "27455f19-a007-49c1-919c-ed58bc02b209",
+            "id": "27455f19-a009-49c1-919c-ed58bc02b209",
             "level": 0,
             "email": "3@example.com"
           }
@@ -130,7 +130,7 @@
       "settings": {
         "clients": [
           {
-            "id": "e2847d8f-5733-43e6-9c65-83b686475512",
+            "id": "e2847d2f-5733-43e6-9c65-83b446475512",
             "level": 0,
             "email": "public@example.com"
           }
@@ -157,7 +157,7 @@
       "settings": {
         "clients": [
           {
-            "id": "27455f19-a007-49c1-919c-ed58bc02b209",
+            "id": "27455f19-a007-49c1-919c-ed51bc02b229",
             "level": 0,
             "email": "2@example.com"
           }
