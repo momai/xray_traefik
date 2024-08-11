@@ -55,13 +55,5 @@ services:
       - "traefik.http.routers.v2ray-ws3.service=v2ray-ws3"
       - "traefik.http.services.v2ray-ws3.loadbalancer.server.port=8390"
 
-      # VLESS WebSocket connection
-      - "traefik.http.routers.v2ray-vless.rule=Host(`${DOMAIN}`) && PathPrefix(`/3_ws`)"
-      - "traefik.http.routers.v2ray-vless.entrypoints=websecure"
-      - "traefik.http.routers.v2ray-vless.tls.certresolver=myresolver"
-      - "traefik.http.routers.v2ray-vless.middlewares=v2ray-headers"
-      - "traefik.http.routers.v2ray-vless.service=v2ray-vless"
-      - "traefik.http.services.v2ray-vless.loadbalancer.server.port=8444"
-
       # Middleware applied to both routers
       - "traefik.http.middlewares.v2ray-headers.headers.customrequestheaders.X-Forwarded-Proto=https"
