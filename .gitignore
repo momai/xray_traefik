@@ -1,1 +1,5 @@
 letsencrypt/
+.env
+v2ray.json
+xray
+docker-compose.yml.bk
