@@ -3,3 +3,6 @@
 3. `mv .env.sample .env` and `mv v2ray.json.sample v2ray.json`
 4. configure .env and v2ray.json
 5. docker-compose up -d
+
+
+clients.py - print URL ss:// and vless://
