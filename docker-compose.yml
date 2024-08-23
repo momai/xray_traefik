@@ -17,13 +17,25 @@ services:
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "./letsencrypt:/letsencrypt"
+# download subscribe link
+  nginx:
+    image: nginx:alpine
+    volumes:
+      - ./downloads:/usr/share/nginx/html/d
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.nginx.rule=Host(`example.com`) && PathPrefix(`/d`)"
+      - "traefik.http.routers.nginx.entrypoints=websecure"
+      - "traefik.http.routers.nginx.tls.certresolver=myresolver"
+      - "traefik.http.middlewares.nginx-strip-prefix.stripPrefix.prefixes=/d"
+      - "traefik.http.services.nginx.loadbalancer.server.port=80"
   v2ray:
     image: ghcr.io/v2fly/v2ray:v5.16.1
     restart: always
     environment:
       - v2ray.vmess.aead.forced=false
     volumes:
-      - ./v2ray.json:/etc/v2ray/config.json
+      - /root/v2ray_traefik/v2ray.json:/etc/v2ray/config.json
       - ./geosite.dat:/usr/local/share/v2ray/geosite.dat
       - ./geoip.dat:/usr/local/share/v2ray/geoip.dat
     network_mode: "host"
