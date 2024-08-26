@@ -29,15 +29,21 @@ services:
       - "traefik.http.routers.nginx.tls.certresolver=myresolver"
       - "traefik.http.middlewares.nginx-strip-prefix.stripPrefix.prefixes=/d"
       - "traefik.http.services.nginx.loadbalancer.server.port=80"
-  v2ray:
-    image: ghcr.io/v2fly/v2ray:v5.16.1
+  xray:
+#    image: ghcr.io/v2fly/v2ray:v5.16.1
+    image: teddysun/xray
     restart: always
     environment:
       - v2ray.vmess.aead.forced=false
     volumes:
-      - /root/v2ray_traefik/v2ray.json:/etc/v2ray/config.json
-      - ./geosite.dat:/usr/local/share/v2ray/geosite.dat
-      - ./geoip.dat:/usr/local/share/v2ray/geoip.dat
+# v2ray
+#      - /root/v2ray_traefik/v2ray.json:/etc/v2ray/config.json
+#      - ./geosite.dat:/usr/local/share/v2ray/geosite.dat
+#      - ./geoip.dat:/usr/local/share/v2ray/geoip.dat
+# xray
+      - ./v2ray.json:/etc/xray/config.json
+      - ./geosite.dat:/usr/local/share/xray/geosite.dat
+      - ./geoip.dat:/usr/local/share/xray/geoip.dat
     network_mode: "host"
     labels:
       - "traefik.enable=true"
