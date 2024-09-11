@@ -7,8 +7,6 @@ services:
       - "--providers.docker=true"
       - "--entrypoints.web.address=:80"
       - "--entrypoints.websecure.address=:443"
-      - "--entrypoints.reality.address=:8446"
-#      - "--entrypoints.websecure.http.tls.passthrough=true"
       - "--certificatesresolvers.myresolver.acme.httpchallenge=true"
       - "--certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web"
       - "--certificatesresolvers.myresolver.acme.email=${EMAIL}"
@@ -17,11 +15,17 @@ services:
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "./letsencrypt:/letsencrypt"
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/etc/timezone:/etc/timezone:ro"
+
 # download subscribe link
   nginx:
     image: nginx:alpine
     volumes:
       - ./downloads:/usr/share/nginx/html/d
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/etc/timezone:/etc/timezone:ro"
+
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.nginx.rule=Host(`example.com`) && PathPrefix(`/d`)"
@@ -44,6 +48,8 @@ services:
       - ./v2ray.json:/etc/xray/config.json
       - ./geosite.dat:/usr/local/share/xray/geosite.dat
       - ./geoip.dat:/usr/local/share/xray/geoip.dat
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/etc/timezone:/etc/timezone:ro"
     network_mode: "host"
     labels:
       - "traefik.enable=true"
@@ -84,12 +90,82 @@ services:
       - "traefik.http.services.v2ray-vless.loadbalancer.server.port=8444"
 
       # Reality connection
-      - "traefik.tcp.routers.v2ray-reality.rule=HostSNI(`*`)"
-      - "traefik.tcp.routers.v2ray-reality.entrypoints=reality"
-      - "traefik.tcp.routers.v2ray-reality.service=v2ray-reality"
-      - "traefik.tcp.services.v2ray-reality.loadbalancer.server.port=8447"
-
+#      - "traefik.tcp.routers.v2ray-reality.rule=HostSNI(`*`)"
+#      - "traefik.tcp.routers.v2ray-reality.entrypoints=reality"
+#      - "traefik.tcp.routers.v2ray-reality.service=v2ray-reality"
+#      - "traefik.tcp.services.v2ray-reality.loadbalancer.server.port=8447"
 
       # Middleware applied to both routers
       - "traefik.http.middlewares.v2ray-headers.headers.customrequestheaders.X-Forwarded-Proto=https"
 
+  v2ray-exporter:
+    image: wi1dcard/v2ray-exporter:master
+    container_name: v2ray-exporter
+    network_mode: "host"
+    command: ["--v2ray-endpoint", "127.0.0.1:10085"]
+    restart: unless-stopped
+    environment:
+      - TZ=Etc/UTC
+    depends_on:
+      - xray
+
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus:latest
+    network_mode: "host"
+    environment:
+      - TZ=Etc/UTC
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/etc/timezone:/etc/timezone:ro"
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+      - '--web.listen-address=127.0.0.1:9091'
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+#      - "traefik.http.routers.prometheus.rule=Host(`${DOMAIN}`) && PathPrefix(`/prometheus`)"
+      - "traefik.http.routers.prometheus.entrypoints=websecure"
+      - "traefik.http.routers.prometheus.tls.certresolver=myresolver"
+      - "traefik.http.services.prometheus.loadbalancer.server.port=9091"
+      - "traefik.http.routers.prometheus.middlewares=prometheus-stripprefix,prometheus-auth"
+      - "traefik.http.middlewares.prometheus-stripprefix.stripprefix.prefixes=/prometheus"
+      - "traefik.http.middlewares.prometheus-auth.basicauth.users=vpn:$$apr1$$dp7ert1j$$j3Q2CSiqkKUGEtjnnjvhP0" #vpn:WNB7tar@zvd7xpd3xcd
+
+  grafana:
+    container_name: grafana
+    image: grafana/grafana:latest
+    network_mode: "host"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/etc/timezone:/etc/timezone:ro"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=tee*QUIZZING8said-tempest7seasick
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_SERVER_ROOT_URL=https://vpn.momai.dev/grafana
+      - GF_SERVER_SERVE_FROM_SUB_PATH=false
+#      - GF_AUTH_ANONYMOUS_ENABLED=true
+#      - GF_AUTH_ANONYMOUS_ORG_NAME=Main Org.
+#      - GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer
+      - TZ=Etc/UTC
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.grafana.rule=Host(`${DOMAIN}`) && PathPrefix(`/grafana`)"
+      - "traefik.http.routers.grafana.entrypoints=websecure"
+      - "traefik.http.routers.grafana.tls.certresolver=myresolver"
+      - "traefik.http.services.grafana.loadbalancer.server.port=3000"
+      - "traefik.http.middlewares.grafana-stripprefix.stripprefix.prefixes=/grafana"
+      - "traefik.http.routers.grafana.middlewares=grafana-stripprefix@docker"
+
+volumes:
+  prometheus_data:
+  grafana_data:
