@@ -178,6 +178,41 @@
       }
     },
     {
+      "listen": "0.0.0.0",
+      "port": 8447,
+      "protocol": "vless",
+      "settings": {
+        "clients": [
+          {
+            "id": "27455f19-a007-49c1-919c-ed58bc02b209",
+            "level": 0,
+            "email": "reality@examle.com",
+            "flow": "xtls-rprx-vision"
+          }
+        ],
+        "decryption": "none"
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "reality",
+        "realitySettings": {
+          "show": false,
+          "dest": "google.com:443",
+          "serverNames": [
+            "google.com"
+          ],
+          "privateKey": "",
+          "shortIds": [""],
+          "publicKey": ""
+        }
+      },
+      "label": "Vpn | v2ray-reality | momai",
+      "sniffing": {
+        "enabled": true,
+        "destOverride": ["http", "tls"]
+      }
+    },
+    {
       "tag": "dns-in",
       "port": 53,
       "protocol": "dokodemo-door",
