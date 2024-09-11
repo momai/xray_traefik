@@ -148,9 +148,9 @@ services:
       - "/etc/timezone:/etc/timezone:ro"
     environment:
       - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=tee*QUIZZING8said-tempest7seasick
+      - GF_SECURITY_ADMIN_PASSWORD=password
       - GF_USERS_ALLOW_SIGN_UP=false
-      - GF_SERVER_ROOT_URL=https://vpn.momai.dev/grafana
+      - GF_SERVER_ROOT_URL=https://example.com/grafana
       - GF_SERVER_SERVE_FROM_SUB_PATH=false
 #      - GF_AUTH_ANONYMOUS_ENABLED=true
 #      - GF_AUTH_ANONYMOUS_ORG_NAME=Main Org.
