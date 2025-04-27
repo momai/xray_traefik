@@ -6,20 +6,21 @@
 
 Ready-to-deploy solution for Xray server with Traefik as reverse proxy.
 
-**Project status:**
-While this solution remains functional, it has some limitations:
-- Multiple open ports create potential security vulnerabilities
-- Subscription support limited to v2rayng
-- Lack of convenient user management
+**Project status:** While this solution remains functional, it has some limitations:
+
+* Multiple open ports create potential security vulnerabilities
+* Subscription support limited to v2rayng
+* Lack of convenient user management
 
 For extended capabilities, consider Remnawavе with its improved interface and management features.
 
 **Features:**
-- Shadowsocks and VLESS protocols
-- WebSocket transport
-- Automatic SSL certificates via Let's Encrypt
-- Monitoring (Prometheus, Grafana)
-- Client URL generation
+
+* Shadowsocks and VLESS protocols
+* WebSocket transport
+* Automatic SSL certificates via Let's Encrypt
+* Monitoring (Prometheus, Grafana)
+* Client URL generation
 
 ### Quick Start
 
@@ -65,20 +66,21 @@ For extended capabilities, consider Remnawavе with its improved interface and m
 
 Готовое решение для развертывания Xray-сервера с Traefik в качестве обратного прокси.
 
-**О статусе проекта:**
-Хотя решение функционально, оно имеет ограничения:
-- Множество открытых портов создаёт потенциальные уязвимости
-- Поддержка подписок только для v2rayng
-- Отсутствие удобного управления пользователями
+**О статусе проекта:** Хотя решение функционально, оно имеет ограничения:
+
+* Множество открытых портов создаёт потенциальные уязвимости
+* Поддержка подписок только для v2rayng
+* Отсутствие удобного управления пользователями
 
 Для расширенных возможностей рекомендуется Remnawavе с улучшенным интерфейсом и управлением.
 
 **Возможности:**
-- Протоколы Shadowsocks и VLESS
-- WebSocket транспорт
-- Автоматические SSL-сертификаты через Let's Encrypt
-- Мониторинг (Prometheus, Grafana)
-- Генерация URL для клиентов
+
+* Протоколы Shadowsocks и VLESS
+* WebSocket транспорт
+* Автоматические SSL-сертификаты через Let's Encrypt
+* Мониторинг (Prometheus, Grafana)
+* Генерация URL для клиентов
 
 ### Быстрый старт
 
